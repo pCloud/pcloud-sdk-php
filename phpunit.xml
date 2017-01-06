@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="lib/pCloud/autoload.php">
+	<testsuites>
+		<testsuite>
+			<directory>./test/</directory>
+		</testsuite>
+	</testsuites>
+
+	<filter>
+		<whitelist>
+			<directory>./lib/pcloud/</directory>
+		</whitelist>
+	</filter>
+</phpunit>
