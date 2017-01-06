@@ -1,5 +1,7 @@
 # pCloud SDK for PHP 5.6+
 
+[![Build Status](https://travis-ci.org/ivankrastev26/pcloud-php-sdk.svg?branch=master)](https://travis-ci.org/ivankrastev26/pcloud-php-sdk)
+
 A PHP library to access [pCloud Documentation](https://docs.pcloud.com/)
 
 Requirements:
