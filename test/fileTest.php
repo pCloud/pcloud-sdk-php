@@ -6,6 +6,8 @@ class FileTest extends TestCase {
 
 	public function setUp() {
 		pCloud\Config::$curllib = "pCloud\TestCurl";
+		$credentialPath = dirname(__FILE__)."/../lib/pCloud/app.cred";
+		pCloud\Config::$credentialPath = $credentialPath;
 		$this->instance = new pCloud\File();
 	}
 

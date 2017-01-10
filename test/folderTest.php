@@ -5,6 +5,8 @@ use PHPUnit\Framework\TestCase;
 class FolderTest extends TestCase {
 
 	public function setUp() {
+		$credentialPath = dirname(__FILE__)."/../lib/pCloud/app.cred";
+		pCloud\Config::$credentialPath = $credentialPath;
 		pCloud\Config::$curllib = "pCloud\TestCurl";
 		$this->instance = new pCloud\Folder();
 	}
