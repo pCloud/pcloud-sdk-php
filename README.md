@@ -1,42 +1,99 @@
-# pCloud SDK for PHP 5.6+
+# pCloud SDK for PHP
 
-[![Build Status](https://travis-ci.org/ivankrastev26/pcloud-php-sdk.svg?branch=master)](https://travis-ci.org/ivankrastev26/pcloud-php-sdk)
+A PHP library to access [pCloud API](https://docs.pcloud.com/)
 
-A PHP library to access [pCloud Documentation](https://docs.pcloud.com/)
+---
 
-Requirements:
+## Table of Contents
+* [System requirements](#system-requirements)
+* [Get started](#get-started)
+  * [Register your application](#register-your-application)
+* [Install the SDK](#install-the-sdk)
+  * [Using Composer](#using-composer)
+  * [Manually](#manually)
+* [Initializing the SDK](#initializing-the-sdk)
+* [Example](#example)
+
+---
+
+## System requirements
 
   * PHP 5.6+
   * PHP [cURL extension](http://php.net/manual/en/curl.setup.php)
 
-## Setup
+---
 
-If you are using [Composer](http://getcomposer.org/download/), create `composer.json` file and add this code:
-~~~~
-{
-	"require": {
-		"pcloud/pcloud-php-sdk": "1.*"
-	}
-}
-~~~~
-If you are not using Composer, copy `lib/` folder and include `lib/pCloud/autoload.php` in your code
+## Get started
 
-## Using pCloud API
+### Register your application
 
-Log in your pCloud account and go to [My applications](https://docs.pcloud.com/oauth/index.html)
+In order to use this SDK, you have to register your application in [My applications](https://docs.pcloud.com).
 
-Register a new app, go to `Settings`
+---
 
-Enter your `App Key` and `App secret` in `/example/app.info` file
+## Install the SDK
+
+### Using Composer
+
+Install [Composer](http://getcomposer.org/download/). Add the following to `composer.json` file
 
 ~~~~
-{
-	"appKey": "App key",
-	"appSecret": "App secret",
-	"redirect_uri": ""
+"require": {
+  "pcloud/pcloud-php-sdk": "1.*"
 }
 ~~~~
 
-### Running the examples
+### Manually
 
-Run `code.php` to get an authorization code and use this code in `auth.php`
+Copy `lib/` folder and include `lib/pCloud/autoload.php` in your code
+
+---
+
+## Initializing the SDK
+
+The SDK uses an OAuth 2.0 access token to authorize requests to the pCloud API.
+You can obtain a token using the SDK's authorization flow.
+To allow the SDK to do that, find `App Key`, `App secret` and `Redirect URIs` in your application configuration page and add them to `/example/app.info` file.
+
+~~~~
+{
+  "appKey": "App key",
+  "appSecret": "App secret",
+  "redirect_uri": "Redirect URI"
+}
+~~~~
+
+Note that `redirect_uri` is optional.
+
+Run `/example/code.php` to get an authorization code and use this code in `/example/auth.php`. This will generate `/lib/pCloud/app.cred` file with your credentials.
+
+---
+
+## Example
+
+~~~~
+// Include autoload.php and set the credential file path
+
+require_once("../lib/pcloud/autoload.php");
+pCloud\Config::$credentialPath = "../lib/pCloud/app.cred";
+
+// Create Folder instance
+
+$pcloudFolder = new pCloud\Folder();
+
+// Create new folder in root
+
+$folderId = $pcloudFolder->create("New folder");
+
+// Create File instance
+
+$pcloudFile = new pCloud\File();
+
+// Upload new file in created folder
+
+$fileMetadata = $pcloudFile->upload("./sample.png", $folderId);
+
+// Get folder content
+
+$folderContent = $pcloudFolder->getContent($folderId);
+~~~~
