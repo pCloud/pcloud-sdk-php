@@ -97,3 +97,13 @@ $fileMetadata = $pcloudFile->upload("./sample.png", $folderId);
 
 $folderContent = $pcloudFolder->getContent($folderId);
 ~~~~
+
+### Creating custom requests
+
+~~~~
+$method = "userinfo";
+$params = array();
+
+$request = new pCloud\Request();
+$response = $request->get($method, $params); // the second argument is optional
+~~~~
