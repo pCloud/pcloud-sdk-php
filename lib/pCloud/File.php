@@ -45,7 +45,8 @@ class File {
 			}
 		}
 
-		$path = $destination.rawurldecode(end(explode("/", $fileLink)));
+        $parts = explode("/", $fileLink);
+        $path = $destination.rawurldecode(end($parts));
 
 		$source = fopen($fileLink, "rb");
 		$file = fopen("{$path}.download", "wb");
