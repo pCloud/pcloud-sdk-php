@@ -24,6 +24,22 @@ class Folder {
 		return $this->request->get("listfolder", $params);
 	}
 
+    /**
+     * list files in folder identified by name
+     *
+     * @param string $path
+     * @return mixed
+     */
+    public function search(/*string*/ $path) {
+
+        $params = array(
+            "nofiles" => 1,
+            "path" => pathinfo($path, PATHINFO_DIRNAME)
+        );
+
+        return $this->request->get("listfolder", $params);
+    }
+
 	public function listRoot() {
 		return $this->getContent(0);
 	}
