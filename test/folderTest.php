@@ -31,11 +31,11 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-    public function testSearch() {
+    public function testlistFolderByName() {
         $name = 'folderName'.DIRECTORY_SEPARATOR.'fileName';
 
-        $expected = $this->buildExpected("listfolder", array("nofiles" => 1, "path" => "folderName"));
-        $query = $this->instance->search($name);
+        $expected = null;
+        $query = $this->instance->listFolder($name);
 
         $this->assertEquals($expected, $query);
     }
