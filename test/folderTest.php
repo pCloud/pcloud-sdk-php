@@ -32,10 +32,11 @@ class FolderTest extends TestCase {
 	}
 
     public function testlistFolderByName() {
-        $name = 'folderName'.DIRECTORY_SEPARATOR.'fileName';
+        $folderName = "folderName";
 
-        $expected = null;
-        $query = $this->instance->listFolder($name);
+        $expected = [$this->buildExpected("listfolder", array("folderid" => "0"))];
+
+        $query = $this->instance->listFolder($folderName);
 
         $this->assertEquals($expected, $query);
     }

@@ -24,6 +24,21 @@ class Folder {
 		return $this->request->get("listfolder", $params);
 	}
 
+    public function search(/*string*/ $path) {
+
+        $path = pathinfo($path, PATHINFO_DIRNAME);
+        //$path = str_replace(DIRECTORY_SEPARATOR,"\\",$path);
+
+        echo "searching for folder: {$path}".PHP_EOL;
+
+        $params = array(
+            "nofiles" => 1,
+            "path" => $path
+        );
+
+        return $this->request->get("listfolder", $params);
+    }
+
     /**
      * list files in folder identified by name
      * (start from the root, match directory name, ..)
@@ -31,39 +46,38 @@ class Folder {
      * @param int|string $folder
      * @return array|null
      */
-    public function listFolder($folder = 0) {
+    public function listFolder($folder = null) {
 
-        if(is_numeric($folder)) {
-            return (array)$this->getContent((int)$folder);
+        // first compare with each folder in root
+        if(is_null($folder)) {
+            return (array)$this->getContent((int)0);
         }
 
         $extension = (string)pathinfo($folder, PATHINFO_EXTENSION);
         if(!empty($extension)) {
             $folder = (string)pathinfo($folder, PATHINFO_DIRNAME);
         }
-        $path_parts = (array)explode(DIRECTORY_SEPARATOR, $folder);
+        $path_parts = array_reverse((array)explode(DIRECTORY_SEPARATOR, $folder));
 
-        $currentDirectory = is_numeric($folder) ? (array)$this->getContent($folder) : [];
-        $i = 0;
-        foreach($path_parts as $folderName) {
+        $directory = null;
+        $currentFolderId = 0;
+        while(($folderName = array_pop($path_parts))){ /* current directory */
+            $folderItems = (array)$this->getContent((int)$currentFolderId);
 
-            while ($currentDirectory) {
-                $directory = (array)array_pop($currentDirectory);
+            foreach($folderItems as $key => $directory) {
 
+                $directory = (array)$directory;
                 if (isset($directory['isfolder']) && (bool)$directory['isfolder'] === true) {
                     if (!empty($directory['name']) && strncmp($folderName, $directory['name'], strlen($folderName)) === 0) {
-
-                        if(count($path_parts) === ++$i) {
-                            return (array)$directory;
-                        }
-                        $currentDirectory = (array)$this->getContent($directory['folderid']);
+                        $currentFolderId = $directory['folderid'];
                         break;
                     }
                 }
             }
+
         }
 
-        return null;
+        return $directory;
     }
 
 
