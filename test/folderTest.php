@@ -31,6 +31,16 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
+    public function testlistFolderByName() {
+        $folderName = "folderName";
+
+        $expected = [$this->buildExpected("listfolder", array("folderid" => "0"))];
+
+        $query = $this->instance->listFolder($folderName);
+
+        $this->assertEquals($expected, $query);
+    }
+
 	public function testCreateFolder() {
 		$folderid = 1234;
 		$name = "folderName";

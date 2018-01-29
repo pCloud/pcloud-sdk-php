@@ -24,13 +24,70 @@ class Folder {
 		return $this->request->get("listfolder", $params);
 	}
 
+    public function search(/*string*/ $path) {
+
+        $path = pathinfo($path, PATHINFO_DIRNAME);
+        //$path = str_replace(DIRECTORY_SEPARATOR,"\\",$path);
+
+        echo "searching for folder: {$path}".PHP_EOL;
+
+        $params = array(
+            "nofiles" => 1,
+            "path" => $path
+        );
+
+        return $this->request->get("listfolder", $params);
+    }
+
+    /**
+     * list files in folder identified by name
+     * (start from the root, match directory name, ..)
+     *
+     * @param int|string $folder
+     * @return array|null
+     */
+    public function listFolder($folder = null) {
+
+        // first compare with each folder in root
+        if(is_null($folder)) {
+            return (array)$this->getContent((int)0);
+        }
+
+        $extension = (string)pathinfo($folder, PATHINFO_EXTENSION);
+        if(!empty($extension)) {
+            $folder = (string)pathinfo($folder, PATHINFO_DIRNAME);
+        }
+        $path_parts = array_reverse((array)explode(DIRECTORY_SEPARATOR, $folder));
+
+        $directory = null;
+        $currentFolderId = 0;
+        while(($folderName = array_pop($path_parts))){ /* current directory */
+            $folderItems = (array)$this->getContent((int)$currentFolderId);
+
+            foreach($folderItems as $key => $directory) {
+
+                $directory = (array)$directory;
+                if (isset($directory['isfolder']) && (bool)$directory['isfolder'] === true) {
+                    if (!empty($directory['name']) && strncmp($folderName, $directory['name'], strlen($folderName)) === 0) {
+                        $currentFolderId = $directory['folderid'];
+                        break;
+                    }
+                }
+            }
+
+        }
+
+        return $directory;
+    }
+
+
 	public function listRoot() {
 		return $this->getContent(0);
 	}
 
 	public function getContent($folderId) {
 		if (!is_int($folderId)) {
-			throw new InvalidArgumentException("Invalid folder id");
+			throw new InvalidArgumentException("Invalid folder id {$folderId}");
 		}
 
 		$folderMetadata = $this->getMetadata($folderId);

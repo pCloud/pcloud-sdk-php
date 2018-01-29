@@ -72,6 +72,15 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
+	public function testDownloadFile() {
+        $fileid = 1234;
+        $destination = sys_get_temp_dir();
+
+        $result = $this->instance->download($fileid, $destination);
+
+        $this->assertEquals(gettype($result), 'boolean');
+    }
+
 	private function buildExpected($method, $params) {
 		$expected = pCloud\Config::$host.$method;
 
