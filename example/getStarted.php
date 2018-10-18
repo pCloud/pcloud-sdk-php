@@ -5,6 +5,7 @@
 require_once("../lib/pcloud/autoload.php");
 pCloud\Config::$credentialPath = "../lib/pCloud/app.cred";
 
+
 try {
 	// Create Folder instance
 
