@@ -78,13 +78,17 @@ class File {
 		return $this->request->put("upload_write", $params, $content);
 	}
 
-	public function upload($path, $folderId = 0) {
+	public function upload($path, $folderId = 0, $filename = null) {
 		if (!file_exists($path) || !is_file($path) || !is_readable($path)) {
 			throw new Exception("Invalid file");
 		}
 
 		$path = str_replace(array("\\", "_"), "/", $path);
 		$parts = explode("/", $path);
+
+		if (!$filename) {
+			$filename = end($parts);
+		}
 
 		$upload = $this->createUpload();
 
@@ -101,7 +105,7 @@ class File {
 		}
 		fclose($file);
 
-		return $this->save($upload->uploadid, end($parts), $folderId);
+		return $this->save($upload->uploadid, $filename, $folderId);
 	}
 
 	public function delete($fileId) {
