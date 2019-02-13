@@ -86,7 +86,7 @@ class Folder {
 	}
 
 	public function getContent($folderId) {
-		if (!is_int($folderId)) {
+		if (!is_float($folderId)) {
 			throw new InvalidArgumentException("Invalid folder id {$folderId}");
 		}
 
@@ -110,7 +110,7 @@ class Folder {
 	}
 
 	public function rename($folderId, $name) {
-		if (!is_int($folderId)) {
+		if (!is_float($folderId)) {
 			throw new InvalidArgumentException("Invalid folder id");
 		}
 		if (!is_string($name) || strlen($name) < 1) {
@@ -128,7 +128,7 @@ class Folder {
 	}
 
 	public function move($folderId, $newParent) {
-		if (!is_int($folderId)) {
+		if (!is_float($folderId)) {
 			throw new InvalidArgumentException("Invalid folder id");
 		}
 
@@ -147,7 +147,7 @@ class Folder {
 	}
 
 	public function delete($folderId) {
-		if (!is_int($folderId)) {
+		if (!is_float($folderId)) {
 			throw new InvalidArgumentException("Invalid folder id");
 		}
 
@@ -161,7 +161,7 @@ class Folder {
 	}
 
 	public function deleteRecursive($folderId) {
-		if (!is_int($folderId)) {
+		if (!is_float($folderId)) {
 			throw new InvalidArgumentException("Invalid folder id");
 		}
 
