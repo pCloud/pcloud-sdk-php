@@ -1,6 +1,6 @@
-<?
+<?php
 
-require_once("../lib/pcloud/autoload.php");
+require_once("../lib/pCloud/autoload.php");
 
 $path = "./app.info";
 

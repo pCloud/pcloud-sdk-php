@@ -2,7 +2,19 @@
 
 namespace pCloud;
 
+define("APP_INFO_CONTENT", '{
+	"appKey": "",
+	"appSecret": "",
+	"redirect_uri": ""
+}');
+
 class App {
+	public static function createAppInfoFile($path) {
+                $file_path = $path . '/app.info';
+		if (!file_put_contents($file_path, APP_INFO_CONTENT)) {
+			throw new Exception("Couldn't create app.info!");
+		}
+	}
 
 	public static function loadAppInfoFile($appInfoPath) {
 		if (!file_exists($appInfoPath)) {
@@ -53,10 +65,7 @@ class App {
 		}
 
 		if ($response->result == 0) {
-			$token = ["access_token" => $response->access_token];
-			if (!file_put_contents($credentialPath, json_encode($token, 128))) {
-				throw new Exception("Couldn't write access_token");				
-			}
+			return $response->access_token;
 		} else {
 			throw new Exception($response->error);
 		}

@@ -7,9 +7,25 @@ class Request {
 	private $credentialPath;
 	private $host;
 
-	function __construct() {
+	function __construct($skip_getapiserver=NULL) {
 		$this->credentialPath = Config::$credentialPath;
-		$this->host = Config::$host;
+		if ($skip_getapiserver) {
+			$this->host = Config::$host;
+		} else {
+			try {
+				$this->host = $this->getApiServer();
+			} catch(Exception $e) {
+				// Request shouldn't fail if there is an issue with a single API
+				$this->host = Config::$host;
+			}
+		}
+	}
+
+	private function getApiServer() {
+		$url = Config::$host . 'getapiserver';
+		$curl = $this->buildCurl($url);
+		$getapiserver_resp = $curl->exec();
+		return "https://" . $getapiserver_resp->api[0] . '/';
 	}
 
 	private function getGlobalParams() {
@@ -18,9 +34,9 @@ class Request {
 		$auth = Auth::getAuth($this->credentialPath);
 
 		return array_merge($auth, $globalParams);
-	}
+		}
 
-	private function buildUrl($method, $params = null) {
+		private function buildUrl($method, $params = null) {
 		$url = $this->host.$method;
 
 		if (!is_null($params)) {

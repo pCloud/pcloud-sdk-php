@@ -7,22 +7,20 @@
 	$appInfoPath = "./app.info";
 	$credentialPath = "../lib/pCloud/app.cred";
 
-	require_once("../lib/pcloud/autoload.php");
+	require_once("../lib/pCloud/autoload.php");
 
 	try {
-		if (isset($_GET["code"])) {
+		if (true) {
 
 			$appInfo = pCloud\App::loadAppInfoFile($appInfoPath);
 
 			$appInfo->code = $_GET["code"];
-
 			if (!file_put_contents($appInfoPath, json_encode($appInfo, 128))) {
 				throw new Exception("\"code\" not found");
 			}
 
-			pCloud\App::getToken($appInfoPath, $credentialPath);
-
-			echo "Done";
+			$token = pCloud\App::getToken($appInfoPath, $credentialPath);
+			echo "<p>Token: {$token}</p>";
 		} else {
 			echo "
 				<form>

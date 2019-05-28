@@ -51,9 +51,11 @@ Copy `lib/` folder and include `lib/pCloud/autoload.php` in your code
 
 ## Initializing the SDK
 
-The SDK uses an OAuth 2.0 access token to authorize requests to the pCloud API.
+The SDK has several ways for authentication.
+The first way is OAuth 2.0 access token to authorize requests to the pCloud API.
 You can obtain a token using the SDK's authorization flow.
-To allow the SDK to do that, find `App Key`, `App secret` and `Redirect URIs` in your application configuration page and add them to `/example/app.info` file.
+To allow the SDK to do that, find `App Key`, `App secret` and `Redirect URIs`.
+Either create a file called app.info in the examples directory or run `create_app_info.php`
 
 ~~~~
 {
@@ -65,36 +67,48 @@ To allow the SDK to do that, find `App Key`, `App secret` and `Redirect URIs` in
 
 Note that `redirect_uri` is optional.
 
-Run `/example/code.php` to get an authorization code and use this code in `/example/auth.php`. This will generate `/lib/pCloud/app.cred` file with your credentials.
+Run `/example/code.php` to get an authorization code and use this code in `/example/auth.php`.
+`/example/auth/php` will return the access_token. You should pass it as an associative array to
+`Auth::setAuthParams();` (example below)
+
+Alternatively, you can use any of the authentication methods here:
+https://docs.pcloud.com/methods/intro/authentication.html
+You need to pass an associative array with the same names as are described in the link above.
+E.g. for username and password, you should pass
+~~~~
+( "username"=>"myusername", "password"=>"secret" )
+~~~~
 
 ---
 
 ## Example
 
 ~~~~
-// Include autoload.php and set the credential file path
-
+// Include autoload.php
+require_once('../vendor/autoload.php');
 require_once("../lib/pcloud/autoload.php");
-pCloud\Config::$credentialPath = "../lib/pCloud/app.cred";
+
+// Load Config
+$dotenv = Dotenv\Dotenv::create(__DIR__);
+$dotenv->load();
+
+// Set the credentials, this should be done only once
+$auth_params = array( "access_token" => "my_secret_token");
+pCloud\Auth::setAuthParams($auth_params);
 
 // Create Folder instance
-
 $pcloudFolder = new pCloud\Folder();
 
 // Create new folder in root
-
 $folderId = $pcloudFolder->create("New folder");
 
 // Create File instance
-
 $pcloudFile = new pCloud\File();
 
 // Upload new file in created folder
-
 $fileMetadata = $pcloudFile->upload("./sample.png", $folderId);
 
 // Get folder content
-
 $folderContent = $pcloudFolder->getContent($folderId);
 ~~~~
 

@@ -1,29 +1,30 @@
 <?php
 
-// Include autoload.php and set the credential file path
+// Include autoload.php
+require_once('../vendor/autoload.php');
+require_once("../lib/pCloud/autoload.php");
 
-require_once("../lib/pcloud/autoload.php");
-pCloud\Config::$credentialPath = "../lib/pCloud/app.cred";
+$dotenv = Dotenv\Dotenv::create(__DIR__);
+$dotenv->load();
 
 try {
-	// Create Folder instance
+        $access_token = getenv('access_token');
+        $auth_params = array( 'access_token' => $access_token);
+        pCloud\Auth::setAuthParams($auth_params);
 
+	// Create Folder instance
 	$pcloudFolder = new pCloud\Folder();
 
 	// Create new folder in root
-
-	$folderId = $pcloudFolder->create("New folder");
+	$folderId = $pcloudFolder->create("New Folder");
 
 	// Create File instance
-
 	$pcloudFile = new pCloud\File();
 
 	// Upload new file in created folder
-
 	$fileMetadata = $pcloudFile->upload("./sample.png", $folderId);
 
 	// Get folder content
-
 	$folderContent = $pcloudFolder->getContent($folderId);
 } catch (Exception $e) {
 	echo $e->getMessage();

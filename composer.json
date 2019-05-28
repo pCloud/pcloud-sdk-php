@@ -11,7 +11,8 @@
 
 	"require": {
 		"php": ">=5.6.0",
-		"ext-curl": "*"
+		"ext-curl": "*",
+		"vlucas/phpdotenv": "^3.3"
 	},
 
 	"require-dev": {
