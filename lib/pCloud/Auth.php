@@ -26,13 +26,13 @@ class Auth {
 	}
 
 	public static function setAuthParams($authParams) {
-		if ($authParams['access_token']) {
+		if (isset($authParams['access_token']) && strlen($authParams['access_token']) > 0) {
 			self::$authParams = array("access_token"=>$authParams["access_token"]);
-		} else if($authParams['auth']) {
+		} else if (isset($authParams['auth']) && strlen($authParams['auth']) > 0) {
 			self::$authParams = array("auth"=>$authParams["auth"]);
-		} else if($authParams["username"] && $authParams["password"]) {
+		} else if(isset($authParams["username"]) && isset($authParams["password"])) {
 			self::$authParams = array("username"=>$authParams["username"], "password"=>$authParams["password"]);
-		} else if($authParams["username"] && $authParams["digest"] && $authParams["passworddigest"]) {
+		} else if(isset($authParams["username"]) && isset($authParams["digest"]) && isset($authParams["passworddigest"])) {
 			self::$authParams = array("username"=>$authParams["username"], "password"=>$authParams["password"], "passworddigest"=>$authParams["passworddigest"]);
 		} else {
 			throw new Exception("Unknown authentication type");
