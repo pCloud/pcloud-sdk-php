@@ -45,7 +45,7 @@ or add the following to `composer.json` file
 
 ~~~~
 "require": {
-  "pcloud/pcloud-php-sdk": "1.*"
+  "pcloud/pcloud-php-sdk": "2.*"
 }
 ~~~~
 
