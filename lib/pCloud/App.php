@@ -3,43 +3,80 @@
 namespace pCloud;
 
 class App {
+	private $appKey;
+	private $appSecret;
+	private $redirect_uri;
+	private $access_token;
+	private $locationid;
 
-	public static function loadAppInfoFile($appInfoPath) {
-		if (!file_exists($appInfoPath)) {
-			throw new Exception("Application config file not found");
-			
-		}
-		return json_decode(file_get_contents($appInfoPath));
+	public function setAppKey($appKey) {
+		$this->appKey = $appKey;
 	}
 
-	public static function getAuthorizeCodeUrl($config) {
-		self::validParams($config, ["appKey"]);
+	public function getAppKey() {
+		return $this->appKey;
+	}
+
+	public function setAppSecret($appSecret) {
+		$this->appSecret = $appSecret;
+	}
+
+	public function getAppSecret() {
+		return $this->appSecret;
+	}
+
+	public function setRedirectURI($redirect_uri) {
+		$this->redirect_uri = $redirect_uri;
+	}
+
+	public function getRedirectURI() {
+		return $this->redirect_uri;
+	}
+
+	public function setAccessToken($access_token) {
+		$this->access_token = $access_token;
+	}
+
+	public function getAccessToken() {
+		return $this->access_token;
+	}
+
+	public function setLocationId($locationid) {
+		$this->locationid = $locationid;
+	}
+
+	public function getLocationId() {
+		return $this->locationid;
+	}
+
+	public function getAuthorizeCodeUrl() {
+		self::validParams(["appKey"]);
 
 		$params = [
-			"client_id" => $config->appKey,
+			"client_id" => $this->appKey,
 			"response_type" => "code"
 		];
 
 
-		if (isset($config->redirect_uri) && !empty($config->redirect_uri)) {
-			$params["redirect_uri"] = $config->redirect_uri;
+		if (isset($this->redirect_uri) && !empty($this->redirect_uri)) {
+			$params["redirect_uri"] = $this->redirect_uri;
 		}
 
 		return "https://my.pcloud.com/oauth2/authorize?".http_build_query($params);
 	}
 
-	public static function getToken($appInfoPath, $credentialPath) {
-		$appInfo = self::loadAppInfoFile($appInfoPath);
-
-		self::validParams($appInfo, ["appKey", "appSecret", "code"]);
+	public function getTokenFromCode($code, $locationid) {
+		self::validParams(["appKey", "appSecret"]);
 
 		$params = [
-			"client_id" => $appInfo->appKey,
-			"client_secret" => $appInfo->appSecret,
-			"code" => $appInfo->code
+			"client_id" => $this->appKey,
+			"client_secret" => $this->appSecret,
+			"code" => $code
 		];
 
-		$url = "https://api.pcloud.com/oauth2_token?".http_build_query($params);
+		$host = Config::getApiHostByLocationId($locationid);
+
+		$url = $host . "/oauth2_token?" . http_build_query($params);
 
 		$curl = curl_init($url);
 
@@ -53,18 +90,16 @@ class App {
 		}
 
 		if ($response->result == 0) {
-			$token = ["access_token" => $response->access_token];
-			if (!file_put_contents($credentialPath, json_encode($token, 128))) {
-				throw new Exception("Couldn't write access_token");				
-			}
+			$token = ["access_token" => $response->access_token, "locationid" => $response->locationid];
+			return $token;
 		} else {
 			throw new Exception($response->error);
 		}
 	}
 
-	private static function validParams($params, $keys) {
+	private function validParams($keys) {
 		foreach ($keys as $key) {
-			if (!isset($params->$key) || empty($params->$key)) {
+			if (!isset($this->$key) || empty($this->$key)) {
 				throw new Exception("\"{$key}\" not found");
 			}
 		}

@@ -5,10 +5,15 @@ use PHPUnit\Framework\TestCase;
 class FolderTest extends TestCase {
 
 	public function setUp() {
-		$credentialPath = dirname(__FILE__)."/../lib/pCloud/app.cred";
-		pCloud\Config::$credentialPath = $credentialPath;
+		$access_token = "ACCESS_TOKEN";
+		$locationid = 1;
+
+		$this->pCloudApp = new pCloud\App();
+		$this->pCloudApp->setAccessToken($access_token);
+		$this->pCloudApp->setLocationId($locationid);
+
 		pCloud\Config::$curllib = "pCloud\TestCurl";
-		$this->instance = new pCloud\Folder();
+		$this->instance = new pCloud\Folder($this->pCloudApp);
 	}
 
 	public function tearDown() {
@@ -90,7 +95,7 @@ class FolderTest extends TestCase {
 	}
 
 	private function buildExpected($method, $params) {
-		$expected = pCloud\Config::$host.$method;
+		$expected = pCloud\Config::getApiHostByLocationId($this->pCloudApp->getLocationId()) . $method;
 
 		if (!empty($params)) {
 			$expected .= "?".http_build_query($params);

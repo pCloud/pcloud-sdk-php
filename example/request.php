@@ -1,12 +1,18 @@
 <?php
 
-require_once("../lib/pcloud/autoload.php");
-pCloud\Config::$credentialPath = "../lib/pCloud/app.cred";
+require_once("../lib/pCloud/autoload.php");
 
 use pCloud\Request as Request;
 
 try {
-	$request = new Request();
+	$access_token = "ACCESS_TOKEN";
+	$locationid = 1;
+
+	$pCloudApp = new pCloud\App();
+	$pCloudApp->setAccessToken($access_token);
+	$pCloudApp->setLocationId($locationid);
+
+	$request = new Request($pCloudApp);
 
 	$response = $request->get("listfolder", ['folderid' => 0]);
 } catch (Exception $e) {

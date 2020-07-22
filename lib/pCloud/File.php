@@ -9,8 +9,8 @@ class File {
 	private $partSize;
 	private $request;
 
-	function __construct() {
-		$this->request = new Request();
+	function __construct(App $app) {
+		$this->request = new Request($app);
 		$this->partSize = Config::$filePartSize;
 	}
 

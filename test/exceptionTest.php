@@ -4,13 +4,22 @@ use PHPUnit\Framework\TestCase;
 
 class ExceptionTest extends TestCase {
 
+	public function setUp() {
+		$access_token = "ACCESS_TOKEN";
+		$locationid = 1;
+
+		$this->pCloudApp = new pCloud\App();
+		$this->pCloudApp->setAccessToken($access_token);
+		$this->pCloudApp->setLocationId($locationid);
+	}
+
 	/**
 	 * @dataProvider provideCreateData
 	 * @expectedException Exception
 	 */
 
 	public function testCreateFolder($name) {
-		$folder = new pCloud\Folder();
+		$folder = new pCloud\Folder($this->pCloudApp);
 		$folder->create($name);
 	}
 
@@ -20,7 +29,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testRenameFolder($folderId, $name) {
-		$folder = new pCloud\Folder();
+		$folder = new pCloud\Folder($this->pCloudApp);
 		$folder->rename($folderId, $name);
 	}
 
@@ -30,7 +39,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testMoveFolder($folderId, $newParent) {
-		$folder = new pCloud\Folder();
+		$folder = new pCloud\Folder($this->pCloudApp);
 		$folder->move($folderId, $newParent);
 	}
 
@@ -40,7 +49,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testDeleteFolder($folderId) {
-		$folder = new pCloud\Folder();
+		$folder = new pCloud\Folder($this->pCloudApp);
 		$folder->delete($folderId);
 	}
 
@@ -50,7 +59,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testDeleteRecursiveFolder($folderId) {
-		$folder = new pCloud\Folder();
+		$folder = new pCloud\Folder($this->pCloudApp);
 		$folder->deleteRecursive($folderId);
 	}
 
@@ -60,7 +69,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testGetFileLink($fileId) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->getLink($fileId);
 	}
 
@@ -70,7 +79,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testDownloadFile($fileId, $destination) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->download($fileId, $destination);
 	}
 
@@ -80,7 +89,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testUploadFile($path, $folderId) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->upload($path, $folderId);
 	}
 
@@ -90,7 +99,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testDeleteFile($fileId) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->delete($fileId);
 	}
 
@@ -100,7 +109,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testMoveFile($fileId, $folderId) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->move($fileId, $folderId);
 	}
 
@@ -110,7 +119,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testRenameFile($fileId, $name) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->rename($fileId, $name);
 	}
 
@@ -120,7 +129,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testCopyFile($fileId, $folderId) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->copy($fileId, $folderId);
 	}
 
@@ -130,7 +139,7 @@ class ExceptionTest extends TestCase {
 	 */
 
 	public function testGetFileInfo($fileId) {
-		$file = new pCloud\File();
+		$file = new pCloud\File($this->pCloudApp);
 		$file->getInfo($fileId);
 	}
 

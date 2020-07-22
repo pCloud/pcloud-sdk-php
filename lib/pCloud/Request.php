@@ -4,18 +4,20 @@ namespace pCloud;
 
 class Request {
 
-	private $credentialPath;
+	private $app;
 	private $host;
 
-	function __construct() {
-		$this->credentialPath = Config::$credentialPath;
-		$this->host = Config::$host;
+	function __construct(App $app) {
+		$this->app = $app;
+		$this->host = Config::getApiHostByLocationId($app->getLocationId());
 	}
 
 	private function getGlobalParams() {
 		$globalParams = array();
 
-		$auth = Auth::getAuth($this->credentialPath);
+		$auth = array(
+			"access_token" => $this->app->getAccessToken()
+		);
 
 		return array_merge($auth, $globalParams);
 	}

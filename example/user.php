@@ -1,9 +1,16 @@
 <?php
 
-require_once("../lib/pcloud/autoload.php");
+require_once("../lib/pCloud/autoload.php");
 
 try {
-	$pCloudUser = new pCloud\User();
+	$access_token = "ACCESS_TOKEN";
+	$locationid = 1;
+
+	$pCloudApp = new pCloud\App();
+	$pCloudApp->setAccessToken($access_token);
+	$pCloudApp->setLocationId($locationid);
+
+	$pCloudUser = new pCloud\User($pCloudApp);
 
 	$info = $pCloudUser->getUserInfo();
 

@@ -7,8 +7,8 @@ class User {
 	private $request;
 	private $userInfo;
 
-	function __construct() {
-		$this->request = new Request();
+	function __construct(App $app) {
+		$this->request = new Request($app);
 		$this->userInfo = $this->request->get("userinfo");
 	}
 

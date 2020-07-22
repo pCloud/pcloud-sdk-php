@@ -4,29 +4,29 @@
 	</head>
 	<body>
 	<?php
-	$appInfoPath = "./app.info";
-	$credentialPath = "../lib/pCloud/app.cred";
 
-	require_once("../lib/pcloud/autoload.php");
+	require_once("../lib/pCloud/autoload.php");
 
 	try {
-		if (isset($_GET["code"])) {
+		if (isset($_GET["code"]) && isset($_GET["locationid"])) {
+			$appKey="APP_KEY";
+			$appSecret="APP_SECRET";
+			$redirect_uri="REDIRECT_URI";
 
-			$appInfo = pCloud\App::loadAppInfoFile($appInfoPath);
+			$app = new pCloud\App();
+			$app->setAppKey($appKey);
+			$app->setAppSecret($appSecret);
+			$app->setRedirectURI($redirect_uri);
 
-			$appInfo->code = $_GET["code"];
+			$token = $app->getTokenFromCode($_GET["code"], $_GET['locationid']);
 
-			if (!file_put_contents($appInfoPath, json_encode($appInfo, 128))) {
-				throw new Exception("\"code\" not found");
-			}
-
-			pCloud\App::getToken($appInfoPath, $credentialPath);
-
-			echo "Done";
+			echo "Token: " . $token["access_token"] . "</br>";
+			echo "Locationid: " . $token["locationid"];
 		} else {
 			echo "
 				<form>
 					<input type=\"text\" name=\"code\" placeholder=\"Code\"/>
+					<input type=\"text\" name=\"locationid\" placeholder=\"Locationid\"/>
 					<input type=\"submit\">
 				</form>";
 		}

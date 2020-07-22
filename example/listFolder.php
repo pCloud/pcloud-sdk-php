@@ -1,9 +1,16 @@
 <?php
 
-require_once("../lib/pcloud/autoload.php");
+require_once("../lib/pCloud/autoload.php");
 
 try {
-	$pCloudFolder = new pCloud\Folder();
+	$access_token = "ACCESS_TOKEN";
+	$locationid = 1;
+
+	$pCloudApp = new pCloud\App();
+	$pCloudApp->setAccessToken($access_token);
+	$pCloudApp->setLocationId($locationid);
+
+	$pCloudFolder = new pCloud\Folder($pCloudApp);
 
 	function appendFolder($folderid, $pCloudFolder) {
 		echo "<ul style=\"list-style-type: none;\">";

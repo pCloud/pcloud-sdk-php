@@ -2,13 +2,19 @@
 
 // Include autoload.php and set the credential file path
 
-require_once("../lib/pcloud/autoload.php");
-pCloud\Config::$credentialPath = "../lib/pCloud/app.cred";
+require_once("../lib/pCloud/autoload.php");
 
 try {
+	$access_token = "ACCESS_TOKEN";
+	$locationid = 1;
+
+	$pCloudApp = new pCloud\App();
+	$pCloudApp->setAccessToken($access_token);
+	$pCloudApp->setLocationId($locationid);
+
 	// Create Folder instance
 
-	$pcloudFolder = new pCloud\Folder();
+	$pcloudFolder = new pCloud\Folder($pCloudApp);
 
 	// Create new folder in root
 
@@ -16,7 +22,7 @@ try {
 
 	// Create File instance
 
-	$pcloudFile = new pCloud\File();
+	$pcloudFile = new pCloud\File($pCloudApp);
 
 	// Upload new file in created folder
 

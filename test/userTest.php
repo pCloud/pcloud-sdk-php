@@ -5,10 +5,15 @@ use PHPUnit\Framework\TestCase;
 class UserTest extends TestCase {
 
 	public function setUp() {
-		$credentialPath = dirname(__FILE__)."/../lib/pCloud/app.cred";
-		pCloud\Config::$credentialPath = $credentialPath;
+		$access_token = "ACCESS_TOKEN";
+		$locationid = 1;
+
+		$this->pCloudApp = new pCloud\App();
+		$this->pCloudApp->setAccessToken($access_token);
+		$this->pCloudApp->setLocationId($locationid);
+
 		pCloud\Config::$curllib = "pCloud\TestCurl";
-		$this->instance = new pCloud\User();
+		$this->instance = new pCloud\User($this->pCloudApp);
 	}
 
 	public function tearDown() {
@@ -16,7 +21,7 @@ class UserTest extends TestCase {
 	}
 
 	public function testUserInfo() {
-		$expected = pCloud\Config::$host."userinfo";
+		$expected = pCloud\Config::getApiHostByLocationId($this->pCloudApp->getLocationId()) . "userinfo";
 		$query = $this->instance->getUserInfo();
 
 		$this->assertEquals($expected, $query);
