@@ -2,25 +2,42 @@
 
 use PHPUnit\Framework\TestCase;
 
-class FileTest extends TestCase {
+/**
+ * File test
+ */
+class FileTest extends TestCase
+{
 
-	public function setUp() {
-		$access_token = "ACCESS_TOKEN";
-		$locationid = 1;
+	/**
+	 * @return void
+	 */
+	public function setUp(): void
+	{
+		$access_token = getenv('ACCESS_TOKEN');
+		$locationid = intval(getenv('LOCATION'));
 
-		$this->pCloudApp = new pCloud\App();
+		$this->pCloudApp = new pCloud\Sdk\App();
 		$this->pCloudApp->setAccessToken($access_token);
 		$this->pCloudApp->setLocationId($locationid);
 
-		pCloud\Config::$curllib = "pCloud\TestCurl";
-		$this->instance = new pCloud\File($this->pCloudApp);
+		pCloud\Sdk\Config::$curllib = "pCloud\Sdk\TestCurl";
+		$this->instance = new pCloud\Sdk\File($this->pCloudApp);
 	}
 
-	public function tearDown() {
+	/**
+	 * @return void
+	 */
+	public function tearDown(): void
+	{
 		unset($this->instance);
 	}
 
-	public function testGetFileInfo() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testGetFileInfo()
+	{
 		$fileid = 1234;
 
 		$expected = $this->buildExpected("checksumfile", array("fileid" => $fileid));
@@ -29,7 +46,11 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testGetFileLink() {
+	/**
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testGetFileLink()
+	{
 		$fileid = 1234;
 
 		$expected = $this->buildExpected("getfilelink", array("fileid" => $fileid));
@@ -38,7 +59,11 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testDeleteFile() {
+	/**
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testDeleteFile()
+	{
 		$fileid = 1234;
 
 		$expected = $this->buildExpected("deletefile", array("fileid" => $fileid));
@@ -47,7 +72,11 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testRenameFile() {
+	/**
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testRenameFile()
+	{
 		$fileid = 1234;
 		$name = "fileName";
 
@@ -57,7 +86,11 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testMoveFile() {
+	/**
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testMoveFile()
+	{
 		$fileid = 1234;
 		$destination = 12;
 
@@ -67,7 +100,11 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testCopyFile() {
+	/**
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testCopyFile()
+	{
 		$fileid = 1234;
 		$destination = 12;
 
@@ -77,20 +114,32 @@ class FileTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testDownloadFile() {
-        $fileid = 1234;
-        $destination = sys_get_temp_dir();
+	/**
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testDownloadFile()
+	{
+		$fileid = 1234;
+		$destination = sys_get_temp_dir();
+		if (empty($destination)) $destination = "/tmp";
 
-        $result = $this->instance->download($fileid, $destination);
+		$result = $this->instance->download($fileid, $destination);
 
-        $this->assertEquals(gettype($result), 'boolean');
-    }
+		$this->assertEquals('boolean', gettype($result));
+	}
 
-	private function buildExpected($method, $params) {
-		$expected = pCloud\Config::getApiHostByLocationId($this->pCloudApp->getLocationId()) . $method;
+	/**
+	 * @param $method
+	 * @param $params
+	 *
+	 * @return string
+	 */
+	private function buildExpected($method, $params): string
+	{
+		$expected = pCloud\Sdk\Config::getApiHostByLocationId($this->pCloudApp->getLocationId()) . $method;
 
 		if (!empty($params)) {
-			$expected .= "?".http_build_query($params);
+			$expected .= "?" . http_build_query($params);
 		}
 
 		return $expected;

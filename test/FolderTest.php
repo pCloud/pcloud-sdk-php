@@ -2,32 +2,54 @@
 
 use PHPUnit\Framework\TestCase;
 
-class FolderTest extends TestCase {
+/**
+ * Folders tests
+ */
+class FolderTest extends TestCase
+{
 
-	public function setUp() {
-		$access_token = "ACCESS_TOKEN";
-		$locationid = 1;
+	/**
+	 * @return void
+	 */
+	public function setUp(): void
+	{
+		$access_token = getenv('ACCESS_TOKEN');
+		$locationid = intval(getenv('LOCATION'));
 
-		$this->pCloudApp = new pCloud\App();
+		$this->pCloudApp = new pCloud\Sdk\App();
 		$this->pCloudApp->setAccessToken($access_token);
 		$this->pCloudApp->setLocationId($locationid);
 
-		pCloud\Config::$curllib = "pCloud\TestCurl";
-		$this->instance = new pCloud\Folder($this->pCloudApp);
+		pCloud\Sdk\Config::$curllib = "pCloud\Sdk\TestCurl";
+		$this->instance = new pCloud\Sdk\Folder($this->pCloudApp);
 	}
 
-	public function tearDown() {
+	/**
+	 * @return void
+	 */
+	public function tearDown(): void
+	{
 		unset($this->instance);
 	}
 
-	public function testListRoot() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testListRoot()
+	{
 		$expected = $this->buildExpected("listfolder", array("folderid" => 0));
 		$query = $this->instance->listRoot();
 
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testListFolder() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testListFolder()
+	{
 		$folderid = 1234;
 
 		$expected = $this->buildExpected("listfolder", array("folderid" => $folderid));
@@ -36,17 +58,27 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-    public function testlistFolderByName() {
-        $folderName = "folderName";
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testlistFolderByName()
+	{
+		$folderName = "folderName";
 
-        $expected = [$this->buildExpected("listfolder", array("folderid" => "0"))];
+		$expected = [$this->buildExpected("listfolder", array("folderid" => "0"))];
 
-        $query = $this->instance->listFolder($folderName);
+		$query = $this->instance->listFolder($folderName);
 
-        $this->assertEquals($expected, $query);
-    }
+		$this->assertEquals($expected, $query);
+	}
 
-	public function testCreateFolder() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testCreateFolder()
+	{
 		$folderid = 1234;
 		$name = "folderName";
 
@@ -56,7 +88,12 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testRenameFolder() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testRenameFolder()
+	{
 		$folderid = 1234;
 		$name = "newName";
 
@@ -66,7 +103,12 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testMoveFolder() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testMoveFolder()
+	{
 		$folderid = 1234;
 		$destination = 12;
 
@@ -76,7 +118,12 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testDeleteFolder() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testDeleteFolder()
+	{
 		$folderid = 1234;
 
 		$expected = $this->buildExpected("deletefolder", array("folderid" => $folderid));
@@ -85,7 +132,12 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	public function testDeleteRecursiveFolder() {
+	/**
+	 * @return void
+	 * @throws \pCloud\Sdk\Exception
+	 */
+	public function testDeleteRecursiveFolder()
+	{
 		$folderid = 1234;
 
 		$expected = $this->buildExpected("deletefolderrecursive", array("folderid" => $folderid));
@@ -94,11 +146,18 @@ class FolderTest extends TestCase {
 		$this->assertEquals($expected, $query);
 	}
 
-	private function buildExpected($method, $params) {
-		$expected = pCloud\Config::getApiHostByLocationId($this->pCloudApp->getLocationId()) . $method;
+	/**
+	 * @param $method
+	 * @param $params
+	 *
+	 * @return string
+	 */
+	private function buildExpected($method, $params): string
+	{
+		$expected = pCloud\Sdk\Config::getApiHostByLocationId($this->pCloudApp->getLocationId()) . $method;
 
 		if (!empty($params)) {
-			$expected .= "?".http_build_query($params);
+			$expected .= "?" . http_build_query($params);
 		}
 
 		return $expected;
