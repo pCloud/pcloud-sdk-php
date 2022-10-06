@@ -132,11 +132,11 @@ class Folder
 	 *
 	 * @param int $folderId
 	 *
-	 * @return stdClass
+	 * @return array
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function getContent(int $folderId): stdClass
+	public function getContent(int $folderId): array
 	{
 		$folderMetadata = $this->getMetadata($folderId);
 
