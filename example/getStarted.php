@@ -15,27 +15,27 @@ require_once("../lib/autoload.php");
 
 try {
 	$access_token = "ACCESS_TOKEN";
-	$locationid = 1;
+	$locationId = 1;
 
 	$pCloudApp = new pCloud\Sdk\App();
 	$pCloudApp->setAccessToken($access_token);
-	$pCloudApp->setLocationId($locationid);
+	$pCloudApp->setLocationId($locationId);
 	$pCloudApp->setCurlExecutionTimeout(10);
 
 	// Create Folder instance
-	$pcloudFolder = new pCloud\Sdk\Folder($pCloudApp);
+	$pCloudFolder = new pCloud\Sdk\Folder($pCloudApp);
 
 	// Create new folder in root
-	$folderId = $pcloudFolder->create("New folder");
+	$folderId = $pCloudFolder->create("New folder");
 
 	// Create File instance
-	$pcloudFile = new pCloud\Sdk\File($pCloudApp);
+	$pCloudFile = new pCloud\Sdk\File($pCloudApp);
 
 	// Upload new file in created folder
-	$fileMetadata = $pcloudFile->upload("./sample.png", $folderId);
+	$fileMetadata = $pCloudFile->upload("./sample.png", $folderId);
 
 	// Get folder content
-	$folderContent = $pcloudFolder->getContent($folderId);
+	$folderContent = $pCloudFolder->getContent($folderId);
 
 } catch (Exception $e) {
 	echo $e->getMessage();

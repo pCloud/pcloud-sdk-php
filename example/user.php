@@ -4,11 +4,11 @@ require_once("../lib/autoload.php");
 
 try {
 	$access_token = "ACCESS_TOKEN";
-	$locationid = 1;
+	$locationId = 1;
 
 	$pCloudApp = new pCloud\Sdk\App();
 	$pCloudApp->setAccessToken($access_token);
-	$pCloudApp->setLocationId($locationid);
+	$pCloudApp->setLocationId($locationId);
 
 	$pCloudUser = new pCloud\Sdk\User($pCloudApp);
 

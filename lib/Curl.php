@@ -2,36 +2,30 @@
 
 namespace pCloud\Sdk;
 
+use CurlHandle;
 use InvalidArgumentException;
 use Throwable;
 use stdClass;
 
 /**
  * cURL class
- * this class manages the main cURL functionality
+ * This class manages the main cURL functionality.
  *
  * @package pCloud\Sdk
  */
 class Curl
 {
-	/**
-	 * Holds the cURL
-	 *
-	 * @var false|resource $curl
-	 */
-	protected $curl;
+	/** @var CurlHandle|null $curl Holds the cURL. */
+	protected ?CurlHandle $curl = null;
+
+	/** @var array $headers Array of header data. */
+	private array $headers = array();
 
 	/**
-	 * Array of header data
-	 *
-	 * @var array $headers
-	 */
-	private $headers = array();
-
-	/**
-	 * Class constructor
-	 *
-	 * @param string $url
+	 * Main class constructor.
+     *
+	 * @param string $url Class constructor.
+     * @throws InvalidArgumentException If the URL is empty ( not provided ) we will throw an exception.
 	 */
 	function __construct(string $url)
 	{
@@ -39,38 +33,41 @@ class Curl
 			throw new InvalidArgumentException("Invalid URL");
 		}
 
-		$this->curl = curl_init($url);
+		$curlInit = curl_init($url);
+
+        if (!is_bool($curlInit)) {
+            $this->curl = $curlInit;
+        }
 	}
 
 	/**
-	 * Class destructor
+	 * Class destructor.
+     * We will close the curl connection if it's not null.
 	 */
 	public function __destruct()
 	{
-		if (is_resource($this->curl)) {
-			curl_close($this->curl);
+		if (!is_null($this->curl)) {
+            curl_close($this->curl);
 		}
 	}
 
 	/**
-	 * Set cURL option
+	 * Set cURL option.
 	 *
-	 * @param string $option
-	 * @param mixed $value
-	 *
+	 * @param string $option Option name.
+	 * @param mixed $value Option value.
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
-	public function setOption(string $option, $value): void
+	public function setOption(string $option, mixed $value): void
 	{
 		curl_setopt($this->curl, $option, $value);
 	}
 
 	/**
-	 * Add aditional header to be sent with the cURL request
+	 * Add additional header to be sent with the cURL request.
 	 *
-	 * @param string $header
-	 *
+	 * @param string $header Additional header string.
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
@@ -80,11 +77,10 @@ class Curl
 	}
 
 	/**
-	 * The main method, executes cURL exec and throws exception if anything fails
+	 * The main method, executes cURL exec and throws exception if anything fails.
 	 *
 	 * @return stdClass
-	 *
-	 * @throws Exception
+	 * @throws Exception Throws exception if the connection is lost.
 	 * @noinspection PhpUnused
 	 */
 	public function exec(): stdClass
@@ -105,21 +101,22 @@ class Curl
 	}
 
 	/**
-	 * Simple "retry" function based on the response status code
+	 * Simple "retry" function based on the response status code.
 	 *
 	 * @return bool|string
 	 */
-	private function curlReconnect()
-	{
+	private function curlReconnect(): bool|string
+    {
 		try {
 			foreach (range(0, 3) as $ignored) {
 				$response = curl_exec($this->curl);
 				if (intval(curl_getinfo($this->curl, CURLINFO_RESPONSE_CODE)) == 200) {
 					return $response;
 				}
+                sleep(2 + (2 * $ignored));
 			}
 			return false;
-		} catch (Throwable $e) {
+		} catch (Throwable) {
 			return false;
 		}
 	}

@@ -14,14 +14,16 @@ class ExceptionTest extends TestCase
 	public function setUp(): void
 	{
 		$access_token = getenv('ACCESS_TOKEN');
-		$locationid = intval(getenv('LOCATION'));
+		$locationId = intval(getenv('LOCATION'));
 
 		$this->pCloudApp = new pCloud\Sdk\App();
 		$this->pCloudApp->setAccessToken($access_token);
-		$this->pCloudApp->setLocationId($locationid);
+		$this->pCloudApp->setLocationId($locationId);
 	}
 
 	/**
+     * Create folder.
+     *
 	 * @dataProvider provideCreateData
 	 *
 	 * @param string|null $name
@@ -36,6 +38,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Rename folder.
+     *
 	 * @dataProvider provideRenameData
 	 *
 	 * @param int $folderId
@@ -51,6 +55,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Delete folder.
+     *
 	 * @dataProvider provideId
 	 *
 	 * @throws \pCloud\Sdk\Exception
@@ -63,6 +69,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Recursively delete folder.
+     *
 	 * @dataProvider provideId
 	 *
 	 * @throws \pCloud\Sdk\Exception
@@ -75,6 +83,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Get file link.
+     *
 	 * @dataProvider provideId
 	 *
 	 * @throws \pCloud\Sdk\Exception
@@ -87,6 +97,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Delete file.
+     *
 	 * @dataProvider provideId
 	 *
 	 * @throws \pCloud\Sdk\Exception
@@ -99,6 +111,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Move file.
+     *
 	 * @dataProvider provideMoveData
 	 *
 	 * @throws \pCloud\Sdk\Exception
@@ -111,6 +125,8 @@ class ExceptionTest extends TestCase
 	}
 
 	/**
+     * Get file info.
+     *
 	 * @dataProvider provideId
 	 *
 	 * @throws \pCloud\Sdk\Exception
@@ -122,6 +138,9 @@ class ExceptionTest extends TestCase
 		$file->getInfo($fileId);
 	}
 
+    /**
+     * @return array
+     */
 	public function provideId(): array
 	{
 		return array(
@@ -130,6 +149,9 @@ class ExceptionTest extends TestCase
 		);
 	}
 
+    /**
+     * @return array[]
+     */
 	public function provideRenameData(): array
 	{
 		return array(
@@ -144,6 +166,9 @@ class ExceptionTest extends TestCase
 		);
 	}
 
+    /**
+     * @return array
+     */
 	public function provideCreateData(): array
 	{
 		return array(
@@ -155,6 +180,9 @@ class ExceptionTest extends TestCase
 		);
 	}
 
+    /**
+     * @return array
+     */
 	public function provideMoveData(): array
 	{
 		return array(
@@ -166,6 +194,9 @@ class ExceptionTest extends TestCase
 		);
 	}
 
+    /**
+     * @return array
+     */
 	public function provideUploadData(): array
 	{
 		return array(
@@ -177,6 +208,9 @@ class ExceptionTest extends TestCase
 		);
 	}
 
+    /**
+     * @return array
+     */
 	public function provideDownloadData(): array
 	{
 		return array(

@@ -2,7 +2,7 @@
 
 namespace pCloud\Sdk;
 
-function autoload($name)
+function autoload($name): void
 {
 	$name = str_replace(array("\\", "_"), "/", $name);
 	$parts = explode("/", $name);

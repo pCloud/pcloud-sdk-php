@@ -9,47 +9,23 @@ namespace pCloud\Sdk;
  */
 class App
 {
-	/**
-	 * App key. In https://docs.pcloud.com/my_apps/ you will find it also as "Client ID"
-	 *
-	 * @var string $appKey
-	 */
-	private $appKey = '';
+	/** @var string $appKey App key. In https://docs.pcloud.com/my_apps/ you will find it also as "Client ID". */
+	private string $appKey = '';
 
-	/**
-	 * App secret. In https://docs.pcloud.com/my_apps/ you will find it also as "Client secret"
-	 *
-	 * @var string $appSecret
-	 */
-	private $appSecret = '';
+	/** @var string $appSecret App secret. In https://docs.pcloud.com/my_apps/ you will find it also as "Client secret". */
+	private string $appSecret = '';
 
-	/**
-	 * Redirect URL. It's usually set in https://docs.pcloud.com/my_apps/
-	 *
-	 * @var string $redirect_uri
-	 */
-	private $redirect_uri = '';
+	/** @var string $redirect_uri Redirect URL. It's usually set in https://docs.pcloud.com/my_apps/. */
+	private string $redirect_uri = '';
 
-	/**
-	 * The access token, you will receive one if you call getTokenFromCode()
-	 *
-	 * @var string $access_token
-	 */
-	private $access_token = '';
+	/** @var string $access_token The access token, you will receive one if you call getTokenFromCode(). */
+	private string $access_token = '';
 
-	/**
-	 * Location ID, 1 - USA, 2 - EU
-	 *
-	 * @var int $locationid
-	 */
-	private $locationid = 1;
+	/** @var int $locationid Location ID, 1 - USA, 2 - EU. */
+	private int $locationid = 1;
 
-	/**
-	 * cURL function execution timeout ( in seconds )
-	 *
-	 * @var int $curl_exec_timeout
-	 */
-	private $curl_exec_timeout = 3600;
+	/** @var int $curl_exec_timeout cURL function execution timeout ( in seconds ). */
+	private int $curl_exec_timeout = 3600;
 
 	/**
 	 * Set App key
@@ -59,13 +35,13 @@ class App
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
-	public function setAppKey(string $appKey)
-	{
+	public function setAppKey(string $appKey): void
+    {
 		$this->appKey = trim($appKey);
 	}
 
 	/**
-	 * Get App key
+	 * Get App key.
 	 *
 	 * @return string
 	 * @noinspection PhpUnused
@@ -76,7 +52,7 @@ class App
 	}
 
 	/**
-	 * Sets app secret
+	 * Sets app secret.
 	 *
 	 * @param string $appSecret
 	 *
@@ -89,7 +65,7 @@ class App
 	}
 
 	/**
-	 * Get app secret
+	 * Get app secret.
 	 *
 	 * @return string
 	 * @noinspection PhpUnused
@@ -100,7 +76,7 @@ class App
 	}
 
 	/**
-	 * Set Redirect URL
+	 * Set Redirect URL.
 	 *
 	 * @param string $redirect_uri
 	 *
@@ -113,7 +89,7 @@ class App
 	}
 
 	/**
-	 * Get Redirect URL
+	 * Get Redirect URL.
 	 *
 	 * @return string
 	 * @noinspection PhpUnused
@@ -124,10 +100,9 @@ class App
 	}
 
 	/**
-	 * Sets the Access Token
+	 * Sets the Access Token.
 	 *
 	 * @param string $access_token
-	 *
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
@@ -137,7 +112,7 @@ class App
 	}
 
 	/**
-	 * Returns the Access Token
+	 * Returns the Access Token.
 	 *
 	 * @return string
 	 * @noinspection PhpUnused
@@ -148,20 +123,20 @@ class App
 	}
 
 	/**
-	 * Set location ID
+	 * Set location ID.
 	 *
-	 * @param string|int $locationid
+	 * @param int|string $locationId Location ID, 1 - USA, 2 - EU.
 	 *
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
-	public function setLocationId($locationid): void
+	public function setLocationId(int|string $locationId): void
 	{
-		$this->locationid = intval($locationid);
+		$this->locationid = intval($locationId);
 	}
 
 	/**
-	 * Get location ID
+	 * Get location ID.
 	 *
 	 * @return int
 	 * @noinspection PhpUnused
@@ -176,7 +151,7 @@ class App
 	 * from which you will receive auth code.
 	 *
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws exception inherited from self::validParams().
 	 * @noinspection PhpUnused
 	 */
 	public function getAuthorizeCodeUrl(): string
@@ -188,7 +163,7 @@ class App
 			"response_type" => "code"
 		);
 
-		if (isset($this->redirect_uri) && !empty($this->redirect_uri)) {
+		if (!empty($this->redirect_uri)) {
 			$params["redirect_uri"] = $this->redirect_uri;
 		}
 
@@ -196,14 +171,15 @@ class App
 	}
 
 	/**
-	 * @param string $code
-	 * @param string|int $locationid
-	 *
+     * Exchange code for access token.
+     *
+	 * @param string $code Authorization code.
+	 * @param int|string $locationId Location ID, 1 - USA, 2 - EU.
 	 * @return array
-	 * @throws Exception
+	 * @throws Exception Throws exception if the method fails to generate access token.
 	 * @noinspection PhpUnused
 	 */
-	public function getTokenFromCode(string $code, $locationid): array
+	public function getTokenFromCode(string $code, int|string $locationId): array
 	{
 		self::validParams(["appKey", "appSecret"]);
 
@@ -213,7 +189,7 @@ class App
 			"code" => $code
 		);
 
-		$host = Config::getApiHostByLocationId($locationid);
+		$host = Config::getApiHostByLocationId($locationId);
 
 		$url = $host . "/oauth2_token?" . http_build_query($params);
 
@@ -224,7 +200,7 @@ class App
 
 		$response = curl_exec($curl);
 
-		if (strpos(curl_getinfo($curl, CURLINFO_CONTENT_TYPE), "application/json") !== false) {
+		if (str_contains(curl_getinfo($curl, CURLINFO_CONTENT_TYPE), "application/json")) {
 			$response = json_decode($response);
 		}
 
@@ -236,18 +212,19 @@ class App
 	}
 
 	/**
-	 * Sets cURL function execution timeout
+	 * Sets cURL function execution timeout.
 	 *
-	 * @param int $timeout
+	 * @param int $timeout cUrl execution timeout in seconds.
 	 * @return void
 	 * @noinspection PhpUnused
 	 */
-	public function setCurlExecutionTimeout(int $timeout) {
+	public function setCurlExecutionTimeout(int $timeout): void
+    {
 		$this->curl_exec_timeout = abs($timeout);
 	}
 
 	/**
-	 * Sets cURL function execution timeout
+	 * Sets cURL function execution timeout.
 	 *
 	 * @return int
 	 * @noinspection PhpUnused
@@ -258,18 +235,17 @@ class App
 	}
 
 	/**
-	 * Verifies is specific key exist in the class
+	 * Verifies is specific key exist in the class.
 	 *
-	 * @param array $keys
-	 *
+	 * @param array $keys Param keys to validate.
 	 * @return void
-	 * @throws Exception
+	 * @throws Exception Throws exception if some key is missing.
 	 * @noinspection PhpUnused
 	 */
 	private function validParams(array $keys): void
 	{
 		foreach ($keys as $key) {
-			if (!isset($this->{$key}) || empty($this->{$key})) {
+			if (empty($this->{$key})) {
 				throw new Exception(sprintf("%s not found", $key));
 			}
 		}

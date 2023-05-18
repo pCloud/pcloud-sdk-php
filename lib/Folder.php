@@ -12,16 +12,11 @@ use stdClass;
  */
 class Folder
 {
+	/** @var Request $request Holds the Request class. */
+	private Request $request;
 
 	/**
-	 * Holds the Request class
-	 *
-	 * @var Request $request
-	 */
-	private $request;
-
-	/**
-	 * Main class constructor
+	 * Main class constructor.
 	 *
 	 * @param App $app
 	 */
@@ -31,10 +26,10 @@ class Folder
 	}
 
 	/**
-	 * Get folder meta data
+	 * Get folder meta data.
 	 *
-	 * @param int $folderId
-	 *
+	 * @param int $folderId Folder ID.
+     *
 	 * @return stdClass
 	 * @throws Exception
 	 * @noinspection PhpUnused
@@ -45,10 +40,10 @@ class Folder
 	}
 
 	/**
-	 * Search for folder
+	 * Search for folder.
 	 *
-	 * @param string $path
-	 *
+	 * @param string $path Folder path.
+     *
 	 * @return stdClass
 	 * @throws Exception
 	 * @noinspection PhpUnused
@@ -56,9 +51,6 @@ class Folder
 	public function search(string $path): stdClass
 	{
 		$path = pathinfo($path, PATHINFO_DIRNAME);
-		//$path = str_replace(DIRECTORY_SEPARATOR,"\\",$path);
-
-		echo "Searching for folder: " . $path . PHP_EOL;
 
 		$params = array(
 			"nofiles" => 1,
@@ -72,18 +64,18 @@ class Folder
 	 * list files in folder identified by name
 	 * (start from the root, match directory name, ...)
 	 *
-	 * @param int|string $folder
+	 * @param int|string|null $folder Folder name.
 	 *
 	 * @return array|null
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function listFolder($folder = null): ?array
+	public function listFolder(int|string $folder = null): ?array
 	{
 
 		// first compare with each folder in root
 		if (is_null($folder)) {
-			return (array)$this->getContent(0);
+			return (array) $this->getContent(0);
 		}
 
 		$extension = strval(pathinfo($folder, PATHINFO_EXTENSION));
@@ -91,14 +83,14 @@ class Folder
 			$folder = strval(pathinfo($folder, PATHINFO_DIRNAME));
 		}
 
-		$path_parts = array_reverse((array)explode(DIRECTORY_SEPARATOR, $folder));
+		$path_parts = array_reverse( explode(DIRECTORY_SEPARATOR, $folder) );
 
 		$directory = null;
 		$currentFolderId = 0;
 
 		while (($folderName = array_pop($path_parts))) { /* current directory */
 
-			$folderItems = (array)$this->getContent(intval($currentFolderId));
+			$folderItems = (array) $this->getContent(intval($currentFolderId));
 
 			foreach ($folderItems as $directory) {
 
@@ -116,7 +108,7 @@ class Folder
 	}
 
 	/**
-	 * List root folders
+	 * List root folders.
 	 *
 	 * @return stdClass
 	 * @throws Exception
@@ -128,15 +120,15 @@ class Folder
 	}
 
 	/**
-	 * Get folder content
+	 * Get folder content.
 	 *
-	 * @param int $folderId
-	 *
-	 * @return array
+	 * @param int $folderId Folder ID.
+     *
+	 * @return stdClass
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function getContent(int $folderId): array
+	public function getContent(int $folderId): stdClass
 	{
 		$folderMetadata = $this->getMetadata($folderId);
 
@@ -144,15 +136,17 @@ class Folder
 	}
 
 	/**
-	 * @param string|null $name
-	 * @param int|null $parent
+     * Create folder.
+     *
+	 * @param string|null $name Folder name.
+	 * @param int|null $parent Parent folder ID.
 	 *
 	 * @return stdClass|int  Folder ID or response Data
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function create(?string $name, ?int $parent = 0)
-	{
+	public function create(?string $name, ?int $parent = 0): int|stdClass
+    {
 		if (empty($name)) {
 			throw new InvalidArgumentException("Please, provide valid folder name");
 		}
@@ -168,17 +162,17 @@ class Folder
 	}
 
 	/**
-	 * Rename folder
+	 * Rename folder.
 	 *
-	 * @param int $folderId
-	 * @param string|null $name
+	 * @param int $folderId Folder ID.
+	 * @param string|null $name New folder name.
 	 *
 	 * @return stdClass|int
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function rename(int $folderId, ?string $name)
-	{
+	public function rename(int $folderId, ?string $name): int|stdClass
+    {
 		if (empty($name)) {
 			throw new InvalidArgumentException("Please, provide folder name");
 		}
@@ -194,17 +188,17 @@ class Folder
 	}
 
 	/**
-	 * Move folder
+	 * Move folder.
 	 *
-	 * @param int $folderId
-	 * @param int $newParent
+	 * @param int $folderId Folder ID.
+	 * @param int $newParent New parent folder ID.
 	 *
 	 * @return stdClass|int
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function move(int $folderId, int $newParent)
-	{
+	public function move(int $folderId, int $newParent): int|stdClass
+    {
 		$params = array(
 			"tofolderid" => $newParent,
 			"folderid" => $folderId
@@ -216,10 +210,10 @@ class Folder
 	}
 
 	/**
-	 * Delete folder
+	 * Delete folder.
 	 *
-	 * @param int $folderId
-	 *
+	 * @param int $folderId Folder ID.
+     *
 	 * @return stdClass
 	 * @throws Exception
 	 * @noinspection PhpUnused
@@ -232,10 +226,10 @@ class Folder
 	}
 
 	/**
-	 * Delete recursive
+	 * Delete recursive.
 	 *
-	 * @param int $folderId
-	 *
+	 * @param int $folderId Folder ID.
+     *
 	 * @return stdClass
 	 * @throws Exception
 	 * @noinspection PhpUnused

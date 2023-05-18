@@ -13,25 +13,13 @@ use stdClass;
 class File
 {
 
-	/**
-	 * The size in bytes of each uploaded/downloaded chunk
-	 *
-	 * @var int $partSize
-	 */
-	private $partSize;
+	/** @var int $partSize The size in bytes of each uploaded/downloaded chunk. */
+	private int $partSize;
 
-	/**
-	 * Holds the Request class
-	 *
-	 * @var Request $request
-	 */
-	private $request;
+	/** @var Request $request Holds the Request class. */
+	private Request $request;
 
-	/**
-	 * File Class constructor
-	 *
-	 * @param App $app
-	 */
+	/** @param App $app File Class constructor. */
 	function __construct(App $app)
 	{
 		$this->request = new Request($app);
@@ -39,12 +27,11 @@ class File
 	}
 
 	/**
-	 * Get link ( using File ID )
+	 * Get link ( using File ID ).
 	 *
-	 * @param int $fileId
-	 *
+	 * @param int $fileId File ID ( pCloud file ID ).
 	 * @return string
-	 * @throws Exception
+	 * @throws Exception Throws exception if the API call fails to provide the link.
 	 * @noinspection PhpUnused
 	 */
 	public function getLink(int $fileId): string
@@ -65,11 +52,10 @@ class File
 	}
 
 	/**
-	 * Download file
+	 * Download file.
 	 *
-	 * @param int $fileId File ID
+	 * @param int $fileId File ID.
 	 * @param string $destination The destination, where the file will be stored!
-	 *
 	 * @return bool
 	 * @throws Exception
 	 * @noinspection PhpUnused
@@ -104,12 +90,13 @@ class File
 	}
 
 	/**
-	 * @param string $path
-	 * @param int $folderId
-	 * @param string|null $filename
-	 *
+     * The upload call.
+     *
+	 * @param string $path The path to the file.
+	 * @param int $folderId Folder ID ( pCloud folder ID ).
+	 * @param string|null $filename The name of the file.
 	 * @return stdClass
-	 * @throws Exception
+	 * @throws Exception Throws exception if the file doesn't succeed to upload.
 	 */
 	public function upload(string $path, int $folderId = 0, string $filename = null): stdClass
 	{
@@ -148,7 +135,7 @@ class File
 					$numFailures = 0;
 					continue 2;
 
-				} catch (Exception $e) {
+				} catch (Exception) {
 					$numFailures++;
 					sleep(3);
 				}
@@ -166,7 +153,7 @@ class File
 	}
 
 	/**
-	 * Delete file ( using file ID )
+	 * Delete file ( using file ID ).
 	 *
 	 * @param int $fileId
 	 *
@@ -182,7 +169,7 @@ class File
 	}
 
 	/**
-	 * Rename file ( using file ID )
+	 * Rename file ( using file ID ).
 	 *
 	 * @param int $fileId
 	 * @param string $name
@@ -206,7 +193,7 @@ class File
 	}
 
 	/**
-	 * Moves file
+	 * Moves file.
 	 *
 	 * @param int $fileId
 	 * @param int $folderId
@@ -226,7 +213,7 @@ class File
 	}
 
 	/**
-	 * Copy file
+	 * Copy file.
 	 *
 	 * @param int $fileId
 	 * @param int $folderId
@@ -246,12 +233,12 @@ class File
 	}
 
 	/**
-	 * Get file info ( using file ID )
+	 * Get file info ( using file ID ).
 	 *
 	 * @param int $fileId
 	 *
 	 * @return stdClass
-	 * @throws Exception
+	 * @throws Exception Throws exception if the API call fails to return the expected data.
 	 * @noinspection PhpUnused
 	 */
 	public function getInfo(int $fileId): stdClass
@@ -260,7 +247,7 @@ class File
 	}
 
 	/**
-	 * Prepare to initiate Upload process
+	 * Prepare to initiate Upload process.
 	 *
 	 * @return stdClass
 	 * @throws Exception
@@ -271,9 +258,11 @@ class File
 	}
 
 	/**
-	 * @param int $uploadId
-	 * @param string $name
-	 * @param int $folderId
+     * Internal function to save the uploaded file.
+     *
+	 * @param int $uploadId Upload ID ( internal pCloud upload identifier ).
+	 * @param string $name The name of the file.
+	 * @param int $folderId Folder ID ( pCloud folder ID ).
 	 *
 	 * @return stdClass
 	 * @throws Exception
@@ -290,10 +279,10 @@ class File
 	}
 
 	/**
-	 * Upload - write content chunk
+	 * Upload - write content chunk.
 	 *
-	 * @param string $content
-	 * @param array|null $params
+	 * @param string $content Content to be written.
+	 * @param array|null $params Additional parameters.
 	 *
 	 * @return void
 	 * @throws Exception

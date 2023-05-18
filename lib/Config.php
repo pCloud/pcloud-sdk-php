@@ -10,19 +10,26 @@ namespace pCloud\Sdk;
  * @package pCloud\Sdk
  */
 class Config {
-	
-	static public $usHost = "https://api.pcloud.com/";
-	static public $euHost = "https://eapi.pcloud.com/";
-	static public $curllib = "pCloud\Sdk\Curl";
-	static public $filePartSize = 10485760;
+
+    /** @var string $usHost USA main API endpoint.  */
+	static public string $usHost = "https://api.pcloud.com/";
+
+    /** @var string $euHost European main API endpoint. */
+	static public string $euHost = "https://eapi.pcloud.com/";
+
+    /** @var string $curllib Path to cURL library. */
+	static public string $curllib = "pCloud\Sdk\Curl";
+
+    /** @var int $filePartSize File chunk size. */
+	static public int $filePartSize = 10485760;
 
 	/**
-	 * @param int $locationid
+	 * @param int|string $locationId Location ID, 1 - USA, 2 - EU.
 	 * @return string
 	 */
-	static public function getApiHostByLocationId(int $locationid): string
+	static public function getApiHostByLocationId(int|string $locationId): string
 	{
-		if ($locationid == 2) {
+		if (intval($locationId) == 2) {
 			return self::$euHost;
 		} else {
 			return self::$usHost;

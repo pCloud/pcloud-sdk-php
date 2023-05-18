@@ -15,11 +15,11 @@ class UserTest extends TestCase
 	public function setUp(): void
 	{
 		$access_token = getenv('ACCESS_TOKEN');
-		$locationid = intval(getenv('LOCATION'));
+		$locationId = intval(getenv('LOCATION'));
 
 		$this->pCloudApp = new pCloud\Sdk\App();
 		$this->pCloudApp->setAccessToken($access_token);
-		$this->pCloudApp->setLocationId($locationid);
+		$this->pCloudApp->setLocationId($locationId);
 
 		pCloud\Sdk\Config::$curllib = "pCloud\Sdk\TestCurl";
 		$this->instance = new pCloud\Sdk\User($this->pCloudApp);

@@ -1,18 +1,18 @@
 {
   "name": "pcloud/pcloud-php-sdk",
   "description": "pCloud SDK for PHP",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "license": "MIT",
   "autoload": {
-	"psr-4": {
-	  "pCloud\\Sdk\\": "lib/"
-	}
+    "psr-4": {
+      "pCloud\\Sdk\\": "lib/"
+    }
   },
   "require": {
-	"php": ">=7.1",
-	"ext-curl": "*"
+    "php": ">=8.0",
+    "ext-curl": "*"
   },
   "require-dev": {
-	"phpunit/phpunit": "9.5.11"
+    "phpunit/phpunit": "9.5.11"
   }
 }

@@ -1,23 +1,29 @@
 <?php
 
+use pCloud\Sdk\Folder;
+
 require_once("../lib/autoload.php");
 
 try {
 
 	$access_token = "ACCESS_TOKEN";
-	$locationid = 1;
+    $locationId = 1;
 
 	$pCloudApp = new pCloud\Sdk\App();
 	$pCloudApp->setAccessToken($access_token);
-	$pCloudApp->setLocationId($locationid);
+	$pCloudApp->setLocationId($locationId);
 
 	$pCloudFolder = new pCloud\Sdk\Folder($pCloudApp);
 
-	function appendFolder($folderid, $pCloudFolder) {
-
+    /**
+     * @param int $folderId Folder ID.
+     * @param pCloud\Sdk\Folder $pCloudFolder Folder object.
+     */
+	function appendFolder(int $folderId, Folder $pCloudFolder): void
+    {
 		echo '<ul style="list-style-type: none;">';
 
-		$content = $pCloudFolder->getContent($folderid);
+		$content = $pCloudFolder->getContent($folderId);
 
 		foreach ($content as $item) {
 			echo '<li>' . $item->name . '</li>';

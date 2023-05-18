@@ -6,11 +6,11 @@ use pCloud\Sdk\Request as Request;
 
 try {
 	$access_token = "ACCESS_TOKEN";
-	$locationid = 1;
+	$locationId = 1;
 
 	$pCloudApp = new pCloud\Sdk\App();
 	$pCloudApp->setAccessToken($access_token);
-	$pCloudApp->setLocationId($locationid);
+	$pCloudApp->setLocationId($locationId);
 
 	$request = new Request($pCloudApp);
 

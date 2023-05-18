@@ -20,7 +20,7 @@
 			$token = $app->getTokenFromCode($_GET["code"], $_GET['locationid']);
 
 			echo "Token: " . $token["access_token"] . "</br>";
-			echo "Locationid: " . $token["locationid"];
+			echo "LocationId: " . $token["locationid"];
 
 		} else {
 

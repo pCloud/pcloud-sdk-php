@@ -12,45 +12,28 @@ use stdClass;
 class Request
 {
 
-	/**
-	 * pCloud api endpoint host
-	 *
-	 * @var string $host
-	 */
-	private $host;
+	/** @var string $host pCloud api endpoint host. */
+	private string $host;
 
 	/**
 	 * Global parameters, initially access token is in this variable,
-	 * later additional parameters are applied
+	 * later additional parameters are applied.
 	 *
 	 * @var array $globalParams
 	 */
-	private $globalParams;
+	private array $globalParams;
+
+	/** @var Curl|null $curlConn cUrl connection is in this variable. */
+	private ?Curl $curlConn = null;
+
+	/** @var string $curlEndPoint Here will be located the final cUrl URL endpoint. */
+	private string $curlEndPoint = '';
+
+	/** @var int $curlExecutionTimeout cURL function execution timeout ( in seconds ). */
+	private int $curlExecutionTimeout;
 
 	/**
-	 * cUrl connection is in this variable.
-	 *
-	 * @var Curl $curlConn
-	 */
-	private $curlConn = null;
-
-	/**
-	 * Here will be located the final cUrl URL endpoint
-	 *
-	 * @var string $curlEndPoint
-	 */
-	private $curlEndPoint = '';
-
-	/**
-	 * cURL function execution timeout ( in seconds )
-	 *
-	 * @var int $curlExecutionTimeout
-	 */
-	private $curlExecutionTimeout;
-
-	/**
-	 * Class constructor
-	 * collects the host and the initial global parameters
+	 * Class constructor collects the host and the initial global parameters.
 	 *
 	 * @param App $app
 	 */
@@ -65,10 +48,10 @@ class Request
 	}
 
 	/**
-	 * GET method
+	 * GET method.
 	 *
-	 * @param string $method
-	 * @param array|null $params
+	 * @param string $method API method.
+	 * @param array|null $params Additional parameters.
 	 *
 	 * @return stdClass
 	 * @throws Exception
@@ -88,10 +71,10 @@ class Request
 	}
 
 	/**
-	 * Post method
+	 * Post method.
 	 *
-	 * @param string $method
-	 * @param array|null $params
+	 * @param string $method API method.
+	 * @param array|null $params Additional parameters.
 	 *
 	 * @return stdClass
 	 * @throws Exception
@@ -116,11 +99,11 @@ class Request
 	}
 
 	/**
-	 * Put method, will mostly be used for file upload
+	 * Put method, will mostly be used for file upload.
 	 *
-	 * @param string $method
-	 * @param string $content
-	 * @param array|null $params
+	 * @param string $method API method.
+	 * @param string $content File content.
+	 * @param array|null $params Additional parameters.
 	 *
 	 * @return stdClass
 	 * @throws Exception
@@ -146,10 +129,12 @@ class Request
 	}
 
 	/**
-	 * Setup new Curl instance
+	 * Setup new Curl instance.
+     *
+     * @return void
 	 */
-	private function _buildCurl()
-	{
+	private function _buildCurl(): void
+    {
 		$this->curlConn = new Config::$curllib($this->curlEndPoint);
 
 		$this->curlConn->setOption(CURLOPT_USERAGENT, "pCloud PHP SDK");
@@ -168,10 +153,10 @@ class Request
 	 *
 	 * @param string $method
 	 *
-	 * @param string|array|null $params
+	 * @param array|string|null $params
 	 * @return string
 	 */
-	private function _prepareURL(string $method, $params = null): string
+	private function _prepareURL(string $method, array|string $params = null): string
 	{
 		$url = $this->host . $method;
 
