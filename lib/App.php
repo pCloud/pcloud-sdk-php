@@ -204,11 +204,15 @@ class App
 			$response = json_decode($response);
 		}
 
-		if ($response->result == 0) {
-			return array("access_token" => $response->access_token, "locationid" => $response->locationid);
-		} else {
-			throw new Exception($response->error);
-		}
+        if (is_bool($response)) {
+            throw new Exception("Failed to complete the API call.");
+        } else {
+            if ($response->result == 0) {
+                return array("access_token" => $response->access_token, "locationid" => $response->locationid);
+            } else {
+                throw new Exception($response->error);
+            }
+        }
 	}
 
 	/**

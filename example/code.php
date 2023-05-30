@@ -4,9 +4,9 @@ require_once("../lib/autoload.php");
 
 try {
 
-	$appKey = "APP_KEY";
-	$appSecret = "APP_SECRET";
-	$redirect_uri = "REDIRECT_URI";
+    $appKey = "APP_KEY";
+    $appSecret = "APP_SECRET";
+    $redirect_uri = "REDIRECT_URI";
 
 	$app = new pCloud\Sdk\App();
 	$app->setAppKey($appKey);

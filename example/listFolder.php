@@ -5,8 +5,7 @@ use pCloud\Sdk\Folder;
 require_once("../lib/autoload.php");
 
 try {
-
-	$access_token = "ACCESS_TOKEN";
+    $access_token = "ACCESS_TOKEN";
     $locationId = 1;
 
 	$pCloudApp = new pCloud\Sdk\App();
@@ -23,16 +22,21 @@ try {
     {
 		echo '<ul style="list-style-type: none;">';
 
-		$content = $pCloudFolder->getContent($folderId);
+        try {
+            $content = $pCloudFolder->getContent($folderId);
 
-		foreach ($content as $item) {
-			echo '<li>' . $item->name . '</li>';
-			if ($item->isfolder) {
-				appendFolder($item->folderid, $pCloudFolder);
-			}
-		}
+            foreach ($content as $item) {
+                echo '<li>' . $item->name . '</li>';
+                if ($item->isfolder) {
+                    appendFolder($item->folderid, $pCloudFolder);
+                }
+            }
 
-		echo '</ul>';
+            echo '</ul>';
+
+        } catch (Exception $e) {
+            echo $e->getMessage();
+        }
 	}
 
 	appendFolder(0, $pCloudFolder);

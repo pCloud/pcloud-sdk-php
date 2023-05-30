@@ -75,7 +75,7 @@ class Folder
 
 		// first compare with each folder in root
 		if (is_null($folder)) {
-			return (array) $this->getContent(0);
+			return $this->getContent(0);
 		}
 
 		$extension = strval(pathinfo($folder, PATHINFO_EXTENSION));
@@ -90,7 +90,7 @@ class Folder
 
 		while (($folderName = array_pop($path_parts))) { /* current directory */
 
-			$folderItems = (array) $this->getContent(intval($currentFolderId));
+			$folderItems = $this->getContent(intval($currentFolderId));
 
 			foreach ($folderItems as $directory) {
 
@@ -110,11 +110,11 @@ class Folder
 	/**
 	 * List root folders.
 	 *
-	 * @return stdClass
+	 * @return array
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function listRoot(): stdClass
+	public function listRoot(): array
 	{
 		return $this->getContent(0);
 	}
@@ -124,15 +124,19 @@ class Folder
 	 *
 	 * @param int $folderId Folder ID.
      *
-	 * @return stdClass
+	 * @return array
 	 * @throws Exception
 	 * @noinspection PhpUnused
 	 */
-	public function getContent(int $folderId): stdClass
+	public function getContent(int $folderId): array
 	{
 		$folderMetadata = $this->getMetadata($folderId);
-
-		return property_exists($folderMetadata, 'metadata') ? $folderMetadata->metadata->contents : $folderMetadata;
+        if (property_exists($folderMetadata, 'metadata')) {
+            return $folderMetadata->metadata->contents;
+        } else {
+            $allMetadata = (array) $folderMetadata;
+            return $allMetadata[0];
+        }
 	}
 
 	/**

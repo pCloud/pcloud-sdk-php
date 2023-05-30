@@ -8,9 +8,9 @@
 
 	try {
 		if (isset($_GET["code"]) && isset($_GET["locationid"])) {
-			$appKey="APP_KEY";
-			$appSecret="APP_SECRET";
-			$redirect_uri="REDIRECT_URI";
+            $appKey="APP_KEY";
+            $appSecret="APP_SECRET";
+            $redirect_uri="REDIRECT_URI";
 
 			$app = new pCloud\Sdk\App();
 			$app->setAppKey($appKey);
@@ -19,17 +19,18 @@
 
 			$token = $app->getTokenFromCode($_GET["code"], $_GET['locationid']);
 
-			echo "Token: " . $token["access_token"] . "</br>";
-			echo "LocationId: " . $token["locationid"];
+            echo "Code: " . $_GET["code"] . "<br>";
+            echo "Token: " . $token["access_token"] . "<br>";
+            echo "LocationId: " . $token["locationid"];
 
 		} else {
 
-			echo "
-				<form>
-					<input type=\"text\" name=\"code\" placeholder=\"Code\"/>
-					<input type=\"text\" name=\"locationid\" placeholder=\"Locationid\"/>
-					<button type=\"submit\">Submit</button>
-				</form>";
+			echo '
+				<form method="get">
+					<input type="text" name="code" placeholder="Code" required>
+					<input type="text" name="locationid" placeholder="Locationid" required>
+					<button type="submit">Submit</button>
+				</form>';
 
 		}
 
