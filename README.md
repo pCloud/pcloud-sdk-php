@@ -132,8 +132,8 @@ $response = $request->get($method, $params); // the second argument is optional
 ## Migration guide
 <span id="migration-guide"></span>
 
-In version SDK version 3 the most significant changes are related to adjusting the namespaces.
-To easily migrate to version 3 you need to change the following: 
+In version SDK version 3 and up the most significant changes are related to adjusting the namespaces.
+To easily migrate to version 3 and up you need to change the following: 
 
 ~~~~
 <?php 
@@ -144,7 +144,7 @@ namespace MyPhpApplication;
 use pCloud\App; // <-- Old versions
 
 # change to: 
-use pCloud\Sdk\App;  // <-- version 3.
+use pCloud\Sdk\App;  // <-- version 3+.
 
 -----
 
@@ -152,7 +152,7 @@ use pCloud\Sdk\App;  // <-- version 3.
 
 The same change needs to be applied to all pCloud SDK names, pCloud\File, pCloud\Folder, ...
 
-In case you intanciating the classes directly, you can make the following changes: 
+In case you instantiating the classes directly, you can make the following changes: 
 
 ~~~~
 <?php 
@@ -163,7 +163,7 @@ namespace MyPhpApplication;
 $pCloudFolder = new pCloud\Folder($pCloudApp); // <-- Old versions
 
 # change to: 
-$pCloudFolder = new pCloud\Sdk\Folder($pCloudApp); // <-- version 3.
+$pCloudFolder = new pCloud\Sdk\Folder($pCloudApp); // <-- version 3+.
 
 -----
 
